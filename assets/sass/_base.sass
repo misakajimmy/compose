@@ -167,11 +167,50 @@ hr
     justify-content: space-between
     @media screen and (min-width: 42rem)
       display: none
+  &.collapsed
+    @media screen and (min-width: 42rem)
+      display: none
   h3
     position: relative
-  ul
-    padding: 0
-    list-style: none
+    ul
+      padding: 0
+      list-style: none
+
+.grid-auto
+  position: relative
+
+.aside_collapse_toggle
+  display: none
+  @media screen and (min-width: 42rem)
+    display: flex
+    position: fixed
+    top: 120px
+    left: calc(50% - 1000px - 25px)
+    padding: 0.5rem
+    border: none
+    background: var(--accent)
+    border-radius: 0.25rem
+    cursor: pointer
+    z-index: 10001
+    align-items: center
+    justify-content: center
+    transition: all 0.3s ease
+    &:hover
+      background: var(--theme)
+      svg
+        fill: var(--light)
+    svg
+      width: 1rem
+      height: 1rem
+      fill: var(--text)
+      transition: transform 0.3s ease, fill 0.2s ease
+
+.main.sidebar-collapsed .aside_collapse_toggle
+  @media screen and (min-width: 42rem)
+    background: var(--theme)
+    svg
+      fill: var(--light)
+      transform: rotate(180deg)
 
 th, td
   padding: 0.5rem

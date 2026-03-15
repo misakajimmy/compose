@@ -35,6 +35,10 @@
 @media screen and (min-width: 42rem)
   .grid-auto
     grid-template-columns: 2fr 5fr
+    &.sidebar-collapsed
+      grid-template-columns: 1fr
+      .aside
+        display: none
 
   .grid-reverse
     grid-template-columns: 3fr 1fr

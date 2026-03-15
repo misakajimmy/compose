@@ -232,6 +232,89 @@ function lazyLoadMedia(elements = []) {
   })
 }
 
+function adjustButtonPosition() {
+  const collapseToggle = elem('.aside_collapse_toggle');
+  const navHeader = elem('.nav_header');
+  
+  if (!collapseToggle || !navHeader) return;
+  
+  function updateButtonPosition() {
+    const headerRect = navHeader.getBoundingClientRect();
+    const headerBottom = headerRect.bottom;
+    const headerHeight = navHeader.offsetHeight;
+    
+    // 如果 header 在视口中（底部位置大于0），按钮距离顶部 120px
+    // 如果 header 不在视口中（滚动过去了），按钮距离顶部更近一些
+    if (headerBottom > 0) {
+      // header 可见，使用原始距离
+      collapseToggle.style.top = '120px';
+    } else {
+      // header 已滚动过去，调整按钮位置（可以设置为更小的值，比如 20px）
+      collapseToggle.style.top = '20px';
+    }
+  }
+  
+  // 初始设置
+  updateButtonPosition();
+  
+  // 监听滚动事件
+  let ticking = false;
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      window.requestAnimationFrame(function() {
+        updateButtonPosition();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+  
+  // 监听窗口大小变化
+  window.addEventListener('resize', updateButtonPosition);
+}
+
+function toggleSidebar() {
+  const sidebarStorageKey = `${site_title}-sidebar-collapsed`;
+  const aside = elem('.aside');
+  const gridAuto = elem('.grid-auto');
+  const main = elem('.main');
+  const collapseToggle = elem('.aside_collapse_toggle');
+  
+  if (!aside || !gridAuto || !collapseToggle || !main) return;
+  
+  // 从localStorage读取状态
+  const isCollapsed = bank.getItem(sidebarStorageKey) === 'true';
+  
+  // 应用初始状态
+  if (isCollapsed) {
+    pushClass(aside, 'collapsed');
+    pushClass(gridAuto, 'sidebar-collapsed');
+    pushClass(main, 'sidebar-collapsed');
+  }
+  
+  // 点击切换
+  collapseToggle.addEventListener('click', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const currentlyCollapsed = containsClass(aside, 'collapsed');
+    
+    if (currentlyCollapsed) {
+      // 展开侧边栏
+      deleteClass(aside, 'collapsed');
+      deleteClass(gridAuto, 'sidebar-collapsed');
+      deleteClass(main, 'sidebar-collapsed');
+      bank.setItem(sidebarStorageKey, 'false');
+    } else {
+      // 折叠侧边栏
+      pushClass(aside, 'collapsed');
+      pushClass(gridAuto, 'sidebar-collapsed');
+      pushClass(main, 'sidebar-collapsed');
+      bank.setItem(sidebarStorageKey, 'true');
+    }
+  });
+}
+
 function loadActions() {
   updateDate();
   customizeSidebar();
@@ -239,6 +322,8 @@ function loadActions() {
   copyHeadingLink();
   makeTablesResponsive();
   backToTop();
+  toggleSidebar();
+  adjustButtonPosition();
 
   lazyLoadMedia(['iframe', 'img']);
 
