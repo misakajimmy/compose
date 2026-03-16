@@ -8,6 +8,9 @@
 <html lang={{ $lang }}{{ with $is_dark }} class=dark{{ end }}{{ with $default_mode }} data-mode={{ . }}{{ end }} itemscope itemtype={{ $item_type }}>
 <head>
   {{- partial "head/index" . }}
+  {{- if .Param "math" }}
+    {{- partialCached "math.html" . }}
+  {{- end }}
 </head>
 <body class="page-{{ .Kind }}" id="pagetop">
   <header class="nav_header">
