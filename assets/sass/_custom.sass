@@ -2,3 +2,70 @@
 // due to the cascading nature of css, if you try to override theme css variables in this file, those changes will not apply. Instead, override css variables in the `override.sass` file
 // we recommend not editing this file directly. Instead, create an `assets/sass/_custom.sass` file at the root level of your site.
 // if you edit this file directly, you will have to resolve git conflicts when and if you decide to pull changes we make on the theme
+
+// docs index tree styles
+.docs-index-tree
+  list-style: none
+  margin: 0
+  padding-left: 1.25rem
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace
+
+  ul
+    list-style: none
+    margin: 0
+    padding-left: 1.25rem
+
+  // 防止被 .content ul 的默认圆点覆盖
+  li
+    list-style: none
+
+.docs-index-node
+  position: relative
+  padding-left: 0.4rem
+
+  // toggle 按钮
+  .docs-index-toggle
+    border: none
+    background: transparent
+    cursor: pointer
+    padding: 0
+    margin-right: 0.25rem
+    font-size: 0.8em
+    line-height: 1
+    color: var(--text)
+
+  // 子树容器，做折叠动画
+  .docs-index-children
+    max-height: 1000px
+    overflow: hidden
+    transition: max-height 0.25s ease, opacity 0.25s ease
+    opacity: 1
+
+  &.collapsed
+    .docs-index-children
+      max-height: 0
+      opacity: 0
+
+  // 连续竖线
+  &::before
+    content: ""
+    position: absolute
+    left: -0.75rem
+    top: 0
+    bottom: 0
+    border-left: 1px solid var(--text)
+
+  // 水平连线 + 末端拐角
+  &::after
+    content: ""
+    position: absolute
+    left: -0.75rem
+    top: 0.9em
+    width: 0.75rem
+    border-top: 1px solid var(--text)
+
+  // 最后一个：竖线只画到拐角
+  &:last-child::before
+    bottom: 0.9em
+
+
